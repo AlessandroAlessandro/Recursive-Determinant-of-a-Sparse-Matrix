@@ -7,16 +7,21 @@ public class SparseMatrix implements SparseInterface {
         private int cur_rows = 5;
         private int cur_columns = 5;
         private int num_elements = 0;
-        private MatrixNode head = null;
-
+        public MatrixNode head ;
+    public MatrixNode tail ;
+    
 
         class MatrixNode {
+	    private MatrixNode head ;
             int data;
             int row;
             int col;
             public MatrixNode next = null;
+	    public MatrixNode prev = null;
+
+   
 	    
-            void matrixnode(int data, int row, int col){
+	    public  MatrixNode( int row, int col,int data){
                 this.data = data;
                 this.row = row;
                 this.col = col;
@@ -54,8 +59,8 @@ public void clear(){  // set head to null to clear the list
     */
     
     public void addElement(int row, int col, int data){
-    }
-	/*if (row > cur_rows || col > cur_columns){
+    
+	if (row > cur_rows || col > cur_columns){
 	    throw new IndexOutOfBoundsException("Index " + row + ", "
 						+ col + " is out of bounds!");
 	}
@@ -63,51 +68,68 @@ public void clear(){  // set head to null to clear the list
 	    throw new IndexOutOfBoundsException("Index " + row + ", "
 						+ col + " is out of bounds!");
 	}
-	MatrixNode myNewNode = new MatrixNode();
-	boolean replace = false;
+
+
+  
+	MatrixNode myNewNode = new MatrixNode(row, col, data);
+    /*	boolean replace = false;
 	myNewNode.row=row;
 	myNewNode.col=col;
 	myNewNode.data = data;
 	myNewNode.next = null;
 	MatrixNode curr = head;
 	
+    */
+
+    // Matrix is empty
+	
+	
 
 	if (emptyMatrix()){
-	    this.head=myNewNode;
-	    	    
-	
-		}
-    }
+	    this.head = myNewNode;
+	    this.head.next = null;
 
-	   
-	else {
-	   
-	       		
-		if ( curr.next.row == row && curr.next.col == col) {
-		    myNewNode.row=row;
-		    myNewNode.col=col;
-		    myNewNode.data = data;
-		    myNewNode.next = null;
-		    
-		    //curr= myNewNode;
-		    return;
+	  	    
+	}
+
+	
+	// not empty, we want to add to a matrix
+	else{
+	    MatrixNode curr = this.head;
+
+	    
+	    while (curr.next != null){
+		
+		// if it's in there replace it
+		if ( curr.row == row && curr.col == col) {
+		    curr.data = data;
+		    break;
 		    
 		}
 		
 		curr = curr.next;
-		//	curr = curr.next;
-	    
-	       
+	    }
+
+
+	    if(curr.next == null){
+
+		if ( curr.row == row && curr.col == col) {
+		    curr.data = data;
 		}
-	    curr.next = myNewNode;
+		else{
+		curr.next = myNewNode;
+		myNewNode.next = null;
+		}
+		}
+	
 	    
-
-	}
-
-			
-    */
-
-
+	    }
+	    
+	    
+	    
+    
+	
+    }
 
     /*
         Remove (make 0) the element at the specified row and column.
