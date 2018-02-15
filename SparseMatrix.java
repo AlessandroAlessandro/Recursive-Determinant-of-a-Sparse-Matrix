@@ -4,9 +4,9 @@ import java.util.*;
 
 public class SparseMatrix implements SparseInterface {
 
-        private int cur_rows = 5;
-        private int cur_columns = 5;
-        private int num_elements = 0;
+       public int cur_rows = 5;
+       public int cur_columns = 5;
+       private int num_elements = 0;
         public MatrixNode head ;
     public MatrixNode tail ;
     
@@ -38,8 +38,13 @@ public class SparseMatrix implements SparseInterface {
 	    }
 
 @Override 
-public void clear(){  // set head to null to clear the list
-    head = null;
+public void clear(){  // set all matrix data to 0;
+  MatrixNode  curr = this.head;
+    while (curr != null){
+	curr.data = 0;
+	curr= curr.next;
+    }
+    
     }
 
 
@@ -48,6 +53,8 @@ public void clear(){  // set head to null to clear the list
     */
     @Override
     public void setSize(int size){
+	cur_rows = cur_columns = size;
+	clear();
 	
     }
 
@@ -104,29 +111,61 @@ public void clear(){  // set head to null to clear the list
 		if ( curr.row == row && curr.col == col) {
 		    curr.data = data;
 		    break;
-		    
 		}
+		//	System.out.println("row "+row+" Cur  row "+ curr.row);
+		//	System.out.println("col "+col+" Cur  col "+ curr.col);
+		
+		if (row <= curr.row){
+		    if (col <= curr.col || row < curr.row)
+			{
+			    curr.prev.next = myNewNode;
+			    myNewNode.next = curr;
+			    myNewNode.prev =curr.prev;
+			    curr.prev = myNewNode;
+			    break;
+			}
+		}
+		
 		
 		curr = curr.next;
 	    }
 
 
 	    if(curr.next == null){
-
 		if ( curr.row == row && curr.col == col) {
 		    curr.data = data;
+		    
 		}
+		//	System.out.println("row "+row+" Cur  row "+ curr.row);
+		//		System.out.println("col "+col+" Cur  col "+ curr.col);
+		
+		else if (row <= curr.row){
+		    if (col <= curr.col || row < curr.row)
+			{
+			    if (curr.prev == null){
+				this.head = myNewNode;
+			    myNewNode.next = curr;
+			    curr.prev = myNewNode;
+			    }
+			    else{
+			    curr.prev.next = myNewNode;
+			    myNewNode.next = curr;
+			    myNewNode.prev =curr.prev;
+			    curr.prev = myNewNode;
+			    }
+			}
+		}
+		
 		else{
-		curr.next = myNewNode;
-		myNewNode.next = null;
+		    
+		    curr.next = myNewNode;
+		    myNewNode.next = null;
+		    myNewNode.prev = curr;
 		}
-		}
-	
-	    
 	    }
 	    
 	    
-	    
+	}   
     
 	
     }
@@ -135,9 +174,35 @@ public void clear(){  // set head to null to clear the list
         Remove (make 0) the element at the specified row and column.
         Throws an error if row/column combination is out of bounds.
     */
-    @Override
+    
     public void removeElement(int row, int col){
-       
+	if (row > cur_rows || col > cur_columns){
+	    throw new IndexOutOfBoundsException("Index " + row + ", "
+						+ col + " is out of bounds!");
+	}
+	if ((row < 0) || (col < 0)){
+	    throw new IndexOutOfBoundsException("Index " + row + ", "
+						+ col + " is out of bounds!");
+	}
+
+	MatrixNode curr = this.head;
+
+
+	while (curr != null){
+
+	    // if it's in there replace it with zero
+	    if ( curr.row == row && curr.col == col) {
+		curr.data = 0;
+		break;
+
+	    }
+
+	    curr = curr.next;
+	}
+
+	
+	
+	
     }
 
 
@@ -147,7 +212,27 @@ public void clear(){  // set head to null to clear the list
     */
     @Override
     public int getElement(int row, int col){
-	return 0;
+	
+	if (row > cur_rows || col > cur_columns){
+	    throw new IndexOutOfBoundsException("Index " + row + ", "
+						+ col + " is out of bounds!");
+	}
+	if ((row < 0) || (col < 0)){
+	    throw new IndexOutOfBoundsException("Index " + row + ", "
+						+ col + " is out of bounds!");
+	}
+
+	MatrixNode curr = this.head;
+	while (curr != null){
+
+	    if ( curr.row == row && curr.col == col) 
+		return curr.data;
+	
+	    
+
+	    curr = curr.next;
+	}
+        return 0;	
     }
 
 
@@ -186,10 +271,15 @@ public void clear(){  // set head to null to clear the list
     */
     @Override
     public String toString() {
+
+	// set to ignore 0's
+
+
 	MatrixNode curr = this.head;
 	String output= "";
 	while (curr != null){
-	    output = output + curr.row + curr.col + curr.data + "\n";
+	    if (curr.data != 0)
+	    output = output + curr.row + " " +  curr.col + " " + curr.data + "\n";
 	    curr = curr.next;
 	}
 		
@@ -202,7 +292,8 @@ public void clear(){  // set head to null to clear the list
 
     @Override
     public int getSize(){
-	return 0;
+	return cur_rows;
+     
     }
     
     
