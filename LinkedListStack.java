@@ -1,81 +1,26 @@
-
 public class LinkedListStack {
 
     public static void main(String[] args){
 
-	/*SparseMatrix myMatrix = new SparseMatrix();
-	 	myMatrix.addElement(0,0,5);
-		 	myMatrix.addElement(0,0,3);
-	myMatrix.addElement(0,1,3);
-	myMatrix.addElement(0,1,5);
-	myMatrix.addElement(0,0,7);
-	
-	System.out.print(myMatrix.toString());
+	SparseMatrix Mymatrix = new SparseMatrix(2);
+	Mymatrix.setSize(2);
 
-	*/
-	SparseInterface myTest = new SparseMatrix();
-
-	myTest.addElement(0, 0, 16);
-
-	myTest.addElement(0, 1, 4);
-
-	myTest.removeElement(0,1);
-
-	String correctString = "0 0 16\n";
-
-	System.out.println("toString is correct: " + correctString.equals(myTest.toString()));
-	
-	
-	myTest.setSize(3);
-
-	System.out.println("Size is 3: " + (myTest.getSize() == 3));
-
-	correctString = "";
-
-	System.out.println("toString is correct: " + correctString.equals(myTest.toString()));
-
-	System.out.println(myTest.toString());
-	/*
-	myTest.addElement(3,3,5);
-	myTest.addElement(3,1,3);
-	myTest.addElement(0,0,1);
-	myTest.addElement(2,1,5);
-	
-	myTest.addElement(2,2,7);
-       
-	
-	myTest.addElement(2,2,4);
-	myTest.addElement(2,2,1);
-	
-	myTest.addElement(1,1,-5);
-	
-	myTest.addElement(3,3,-3);
-	myTest.addElement(0,0,-3);
-	
-	*/
-	myTest.addElement(2,2,4);
-
-	myTest.addElement(1,0,-3);
-	correctString = "1 0 -3\n2 2 4\n";
-
-	System.out.println(myTest.toString());
-
-	System.out.println(myTest.getElement(2,2));
-
-	System.out.println("toString is correct: " + correctString.equals(myTest.toString()));
-
-	System.out.println("The determinant is 0: " + (myTest.determinant() == 0));
-
-	SparseInterface myMinor = myTest.minor(1,1);
-
-	System.out.println("The (1,1) element of the minor is 4: " + (myMinor.getElement(1, 1) == 4));
-	System.out.println(myMinor.toString());
-
-	myTest.clear();
+	Mymatrix.addElement(0,1,66);
+	Mymatrix.addElement(0,1,82);
+	Mymatrix.addElement(0,1,-40);
+	Mymatrix.addElement(1,0,46);
+	Mymatrix.addElement(1,1,-63);
+	Mymatrix.addElement(1,0,18);
+	Mymatrix.addElement(1,1,-43);
 
 
-	
+
+
+	System.out.println(Mymatrix.toString());
+	//        System.out.println(Mymatrix.getSize());
+	//        System.out.println(Mymatrix.minor(1,1).toString());
+	//System.out.println(Mymatrix.minor(0,0).toString());
+	System.out.println(Mymatrix.determinant());
     }
-}
-     
+}     
 

@@ -16,7 +16,7 @@ class Pair {
     
     public Pair(int size, double sparcity, int absMax) {
         this.absMax = absMax;
-        this.size = 2;
+        this.size = size;
         int m;
         int n;
         int nonZeroN = (int) (size*size*sparcity);
@@ -73,6 +73,7 @@ class Pair {
     public int getSparseDet() {return this.SparseDet;}
 
     public void determinant() {
+	System.out.println(test.toString());
         this.CCSDet = this.key.determinant();
         this.SparseDet = this.test.determinant();
     }
