@@ -1,7 +1,9 @@
+
 public class LinkedListStack {
 
     public static void main(String[] args){
-	 SparseMatrix myMatrix = new SparseMatrix();
+
+	/*SparseMatrix myMatrix = new SparseMatrix();
 	 	myMatrix.addElement(0,0,5);
 		 	myMatrix.addElement(0,0,3);
 	myMatrix.addElement(0,1,3);
@@ -10,7 +12,7 @@ public class LinkedListStack {
 	
 	System.out.print(myMatrix.toString());
 
-
+	*/
 	SparseInterface myTest = new SparseMatrix();
 
 	myTest.addElement(0, 0, 16);
@@ -61,8 +63,15 @@ public class LinkedListStack {
 	System.out.println(myTest.getElement(2,2));
 
 	System.out.println("toString is correct: " + correctString.equals(myTest.toString()));
-	
-	
+
+	System.out.println("The determinant is 0: " + (myTest.determinant() == 0));
+
+	SparseInterface myMinor = myTest.minor(1,1);
+
+	System.out.println("The (1,1) element of the minor is 4: " + (myMinor.getElement(1, 1) == 4));
+	System.out.println(myMinor.toString());
+
+	myTest.clear();
 
 
 	

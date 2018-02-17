@@ -9,7 +9,7 @@ public class SparseMatrix implements SparseInterface {
        private int num_elements = 0;
         public MatrixNode head ;
     public MatrixNode tail ;
-    
+
 
         class MatrixNode {
 	    private MatrixNode head ;
@@ -19,7 +19,11 @@ public class SparseMatrix implements SparseInterface {
             public MatrixNode next = null;
 	    public MatrixNode prev = null;
 
-   
+	    public MatrixNode (){
+		setSize(5);
+
+	    }
+	    
 	    
 	    public  MatrixNode( int row, int col,int data){
                 this.data = data;
@@ -27,33 +31,35 @@ public class SparseMatrix implements SparseInterface {
                 this.col = col;
             }
         }
+    public SparseMatrix (){
+
+	setSize(5);
+
+    }
     
-    // Constructor
-   
-	    
-	    
+    public SparseMatrix (int size){
+	
+	setSize(size);
+	
+    }
+    
     public boolean emptyMatrix (){ // check if matrix is empty
-
+	
 	return (head == null);
-	    }
-
-@Override 
-public void clear(){  // set all matrix data to 0;
-  MatrixNode  curr = this.head;
-    while (curr != null){
-	curr.data = 0;
-	curr= curr.next;
     }
     
+    @Override 
+    public void clear(){  // set all matrix data to 0;
+	this.head=null;    
     }
 
-
+    
     /*
-        Sets maximum size of the matrix.  Number of rows. Itshould also clear the matrix (make all elements 0)
+      Sets maximum size of the matrix.  Number of rows. Itshould also clear the matrix (make all elements 0)
     */
     @Override
     public void setSize(int size){
-	cur_rows = cur_columns = size;
+	this.cur_rows = this.cur_columns = size;
 	clear();
 	
     }
@@ -118,18 +124,25 @@ public void clear(){  // set all matrix data to 0;
 		if (row <= curr.row){
 		    if (col <= curr.col || row < curr.row)
 			{
+			    if (curr.prev == null){
+				this.head = myNewNode;
+				myNewNode.next = curr;
+				curr.prev = myNewNode;
+			    }
+			    else{
 			    curr.prev.next = myNewNode;
 			    myNewNode.next = curr;
 			    myNewNode.prev =curr.prev;
 			    curr.prev = myNewNode;
 			    break;
+			    }
 			}
 		}
 		
 		
 		curr = curr.next;
 	    }
-
+	    
 
 	    if(curr.next == null){
 		if ( curr.row == row && curr.col == col) {
@@ -225,9 +238,9 @@ public void clear(){  // set all matrix data to 0;
 	MatrixNode curr = this.head;
 	while (curr != null){
 
-	    if ( curr.row == row && curr.col == col) 
+	    if ( curr.row == row && curr.col == col){ 
 		return curr.data;
-	
+	    }
 	    
 
 	    curr = curr.next;
@@ -243,17 +256,87 @@ public void clear(){  // set all matrix data to 0;
     */
     @Override
     public int determinant(){
-
-	return 0;
+	// preforms a recursive call on the minor until it is at the base case of size 2X2 then it computes that matrix and returns the value.
+	int sum = 0;
+	
+	    if (getSize() == 2){
+		sum += getElement(0,0)*getElement(1,1) -
+		    getElement(0,1)*getElement(1,0);
+		System.out.println("im summmm" + sum);
+		return sum;
+	    }
+	// This else statement contains the recursive step.
+	    else {
+		System.out.println("test");
+		for (int i = 0; i < cur_rows; i++) {
+		    sum += (int) (Math.pow(-1, i) * getElement(i, 0) * minor(i, 0).determinant());
+		}
+	    }
+	return sum;
     }
+
 
     /*
         Returns a new matrix which is the minor of the original (See project description for minor definition).
     */
      public SparseInterface minor(int row, int col){
-    	return null ;
-     }
 
+	 if (row > cur_rows || col > cur_columns){
+	     throw new IndexOutOfBoundsException("Index " + row + ", "
+						 + col + " is out of bounds!");
+	 }
+	 if ((row < 0) || (col < 0)){
+	     throw new IndexOutOfBoundsException("Index " + row + ", "
+						 + col + " is out of bounds!");
+	 }
+
+
+
+	 //Creates a new matrix minor that is the minor of the original matrix being passed.
+	 MatrixNode current = head;
+	 SparseMatrix minor = new SparseMatrix(); //(getSize-1 in argument)
+	minor.setSize(getSize()-1);
+// the while loop excludes cases that are in the specified row and column to produce the desired minor of the matrix
+	 while (current != null){
+	     
+	     if ((current.col != col) &&  (current.row != row)){
+	
+
+		 //takes care of the case if the element is at 0'0
+		 if (current.col == 0  && current.row == 0 ){
+		     minor.addElement(current.row, current.col, current.data);
+		     current = current.next;
+		     continue;
+		 }
+		 //takes care of the case if the element is at !0'0
+		 if (current.col == 0  && current.row != 0 ){
+		     minor.addElement(current.row-1, current.col, current.data);
+		     current = current.next;
+		     continue;
+		 }
+		 //takes care of the case if the element is at 0'!0
+		 if (current.col != 0  && current.row == 0 ){
+		     minor.addElement(current.row, current.col-1, current.data);
+		     current = current.next;
+		     continue;
+		 }
+		 //takes care of the case if the element is at !0'!0
+		 if (current.col != 0  && current.row != 0 ) {
+		     minor.addElement(current.row - 1, current.col - 1, current.data);
+		     current = current.next;
+		     continue;
+		 }
+
+		
+	     }
+	     current = current.next;
+	     
+
+	 }
+       
+	 return minor;
+
+     }
     /*
     Should return the nonzero elements of your sparse matrix as a string.
     The String should be k lines, where k is the number of nonzero elements.
@@ -292,7 +375,7 @@ public void clear(){  // set all matrix data to 0;
 
     @Override
     public int getSize(){
-	return cur_rows;
+	return this.cur_rows;
      
     }
     
